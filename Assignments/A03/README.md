@@ -2,7 +2,7 @@
 
 ## Corbin Matamoros
 
-## Assignment Description:
+## Assignment Description
 
 ### This program tests if Python is installed correctly by using the Tkinter library to create a tiny "Hello World" styled window. Also, the program must be executed through the command line
 
@@ -10,7 +10,7 @@
 
 |   #   | File | Assignment Description |
 | :---: | ----------- | ---------------------- |
-|   1    |  main.py  | main driver code that lauches Hello World window |
+|   1    |  [main.py](main.py)  | main driver code that lauches Hello World window |
 
 ## Instructions
 
