@@ -12,6 +12,7 @@
 | :---: | ----------- | ---------------------- |
 |   1    |  [main.py](main.py)  | main driver code that lauches Introduction window |
 |   2    |  [player_info.json](player_info.json)  | `json` file holding player information |
+|   3    |  [output_window_player_info.png](output_window_player_info.png)  | image of Tkinter window |
 
 ## Instructions
 
