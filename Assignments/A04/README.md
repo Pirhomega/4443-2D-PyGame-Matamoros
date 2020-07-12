@@ -23,3 +23,5 @@
 3. Open a command prompt / terminal in the `A04` folder
 
 4. Run `main.py` by typing `python ./main.py player_info.json` on Windows and `python main.py player_info.json` on Linux/Mac
+
+5. Output should look something like this: ![output](https://github.com/Pirhomega/4443-2D-PyGame-Matamoros/blob/master/Assignments/A04/output_window_player_info.png?raw=true)
