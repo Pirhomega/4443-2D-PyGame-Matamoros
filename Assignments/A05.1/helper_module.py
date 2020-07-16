@@ -1,3 +1,5 @@
+# written by Dr. Terry Griffin (https://github.com/rugbyprof/4443-2D-PyGame/tree/master/Resources/R04/002_GameStarter)
+
 import sys
 import json
 
