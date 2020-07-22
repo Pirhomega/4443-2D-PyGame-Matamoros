@@ -4,3 +4,4 @@
 | :---: | ----------- | ---------------------- |
 |   1    |     [A03](A03)        |     Sample Tkinter program     |
 |   2    |     [A04](A04)        |     Tkinter program with commandline parameter handling     |
+|   3    |     [A05.1](A05.1)    |     Pygame app with a sprite moveable with the mouse     |
