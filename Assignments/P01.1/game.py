@@ -133,9 +133,6 @@ def main():
         # fill screen with white
         screen.fill(colors[argDict["color"]]['rgb'])
 
-        # controls sprite behavior
-        all_sprites.update()
-
         # sets frames per second to what's found in commandline instruction
         clock.tick(int(argDict["fps"]))
 
