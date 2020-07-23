@@ -1,3 +1,4 @@
+# python game_pt2.py title="Pygame Example" width=640 height=480 startx=50 starty=50 fps=60 player_image="./ball_48x48.png" background_image="./background.jpg"
 """
 Pygame A05.1
 
@@ -39,10 +40,13 @@ class Camera():
     def update(self, player_target):
         # grabs the left and top points of the targeted sprite
         l, t, _, _ = player_target.rect # l = left,  t = top
+        # print("This is l:", l)
+        # print("This is t:", t)
         # _, _, w, h = self.camera_position # w = width, h = height
         # adjusts the camera position based on targeted sprite (hardcoded widths and heights; 320, 240, 640, and 480 should actually be
         #       half the camera window width, half camera window height, window width, and window height respectively)
-        self.camera_offset = pygame.Rect(l-320, t-240, 1920, 1080)
+        self.camera_offset = (320-l, 240-t)
+        # print("Therefore, this is the offset:", self.camera_offset)
         # print("This is the camera offset all sprites need to be moved by:")
         # print(self.camera_offset)
         # print(self.camera_offset.topleft)
@@ -51,7 +55,7 @@ class Camera():
         # print(self.camera_offset.topleft)
         # modifier = target.rect.move(self.camera_offset.topleft)
         # print(modifier)
-        return self.camera_offset.topleft
+        return self.camera_offset
 
 
 class Background(pygame.sprite.Sprite):
@@ -69,12 +73,16 @@ class Background(pygame.sprite.Sprite):
         # create a pygame rectangle from the dimensions of the background image
         self.rect = self.image.get_rect()
         print(self.rect)
-    
+
+        self.rect.topleft = (0, 0)
+        # print(self.rect)
+ 
     def update(self, position):
         # print("cam.topleft")
         # print(cam.topleft)
         # print(position)
-        self.rect.topleft = (-position[0], -position[1])
+        self.rect.topleft = (position[0], position[1])
+        # print(self.rect.topleft)
         # print(self.rect.topleft)
 
 class Player(pygame.sprite.Sprite):
@@ -93,9 +101,9 @@ class Player(pygame.sprite.Sprite):
         # create a pygame rectable from the dimensions of the image
         self.rect = self.image.get_rect()
 
-        # set the dimensions of the window as member variables
-        self.width = int(argDict["width"])
-        self.height = int(argDict["height"])
+        # # set the dimensions of the window as member variables
+        # self.width = int(argDict["width"])
+        # self.height = int(argDict["height"])
 
         # set the position of the sprite on the window
         self.x = int(argDict["startx"])
@@ -108,26 +116,27 @@ class Player(pygame.sprite.Sprite):
         self.speed = 5
 
         # position the sprite on the screen
-        self.rect.center = (self.x, self.y)
+        self.rect.topleft = self.actual_position = (self.x, self.y)
+
+        # location to which the mouse points
+        self.target_location = (0,0)
 
     def Move(self, mouse_position):
         """
         Move controls the position of the sprite by mouse movement
         """
         # establish the desired position of the sprite
-        self.target_location = mouse_position
+        #   is equal to the mouse's distance from the center of the window plus the actual position of the player
+        self.target_location = (mouse_position[0]-320+self.actual_position[0], mouse_position[1]-240+self.actual_position[1])
+        print(self.target_location)
         # calculate the position of the mouse
         self.MoveWithMouse()
         # position the sprite on the screen
-        self.rect.center = (self.x, self.y)
+        self.rect.topleft = self.actual_position = (self.x, self.y)
         # if the new position of the sprite would put it outside the boundaries of the window,
         # revert to the previous position
-        if self.rect.left <= 0 or self.rect.right >= self.width or self.rect.top <= 0 or self.rect.bottom >= self.height:
-            # print("Too far!")
-            self.rect.center = self.old_loc
-        # print(f"current location at: {self.rect.center}")
-        # print(f"current left at: {self.rect.left}")
-        # print(f"old location at: {self.old_loc}")
+        if self.rect.left <= 0 or self.rect.right >= 1920 or self.rect.top <= 0 or self.rect.bottom >= 1080:
+            self.actual_position = self.old_loc
 
     def MoveWithMouse(self):
         """
@@ -135,8 +144,9 @@ class Player(pygame.sprite.Sprite):
         mouse's position
         """
         # record the current, unchanged position of the sprite
-        self.old_loc = self.rect.center
+        self.old_loc = self.rect.topleft
 
+        # grabs the x and y coordinate of the mouse's position on the screen
         x = self.target_location[0]
         y = self.target_location[1]
 
@@ -152,6 +162,14 @@ class Player(pygame.sprite.Sprite):
         if distance > 10:
             self.x += int(min(5, distance/10) * math.cos(angle))
             self.y += int(min(5, distance/10) * math.sin(angle))
+
+    def update(self, position):
+        # print("cam.topleft")
+        # print(cam.topleft)
+        # print(position)
+        self.rect.topleft = (self.actual_position[0]+position[0], self.actual_position[1]+position[1])
+        # print(self.rect.topleft)
+        # print(self.rect.topleft)
 
 def main():
     pygame.init()
@@ -186,6 +204,10 @@ def main():
     # Run until the user asks to quit game loop
     running = True
     while running:
+
+        # fill screen with white
+        screen.fill((255,255,255))
+
         # sets frames per second to what's found in commandline instruction
         clock.tick(int(argDict["fps"]))
 
@@ -194,7 +216,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        # attempt to move the player
+        # attempt to move the player by sending the positioning of the mouse
         if pygame.mouse.get_focused():
             p1.Move(pygame.mouse.get_pos())
 
