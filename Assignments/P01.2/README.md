@@ -1,16 +1,16 @@
-# P01.1 - CovidZAR.EIEIO
+# P01.2 - CovidZAR.EIEIO
 
 ## Corbin Matamoros
 
 ## Assignment Description
 
-### This program uses the pygame library to move a sprite (textured/colored circle) around a window. The sprite is not allowed to travel off the window at all
+### This program uses the pygame library to move a sprite (textured/colored circle) around a game world while staying centered in the window. The sprite is not allowed to travel off the world, which is surrounded by white
 
 ## Folder Structure
 
 |   #   | File | Assignment Description |
 | :---: | ----------- | ---------------------- |
-|   1    |  [game.py](game.py)  | main driver code that lauches Pygame application |
+|   1    |  [game_pt2.py](game_pt2.py)  | main driver code that lauches Pygame application |
 |   2    |  [helper_module.py](helper_module.py)  | helper code written by Dr. Griffin |
 |   3    |  [color_list.txt](color_list.txt)  | list of available window background colors |
 |   4    |  [colors.json](colors.json)  | `.json` file of names of colors and their RGB/Hex values |

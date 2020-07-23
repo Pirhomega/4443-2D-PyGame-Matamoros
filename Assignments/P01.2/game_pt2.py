@@ -28,33 +28,39 @@ from helper_module import load_colors
 # grab command line arguments
 _, argDict = mykwargs(sys.argv)
 
+# constants
+WINDOW_WIDTH = int(argDict["width"])
+WINDOW_HEIGHT = int(argDict["height"])
+HALF_WINDOW_WIDTH = int(WINDOW_WIDTH / 2)
+HALF_WINDOW_HEIGHT = int(WINDOW_HEIGHT / 2)
+WINDOW_TITLE = argDict["title"]
+GAME_FPS = int(argDict["fps"])
+
 # grab json info from colors.json and load into a dictionary
 colors = load_colors('colors.json')
 
 class Camera():
+    """
+    Used to create an offset in pixels, that when added to all sprites in the game,
+    creates a scrolling effect, keeping the targeted sprite in the center of the window
+    """
     def __init__(self):
-        # first establishes the camera position as to look at the entire background
-        self.camera_offset = pygame.Rect(0, 0, 1920, 1080)
+        self.camera_offset = (0,0)
 
     # moves the camera to focus in on 'target'
     def update(self, player_target):
         # grabs the left and top points of the targeted sprite
         l, t, _, _ = player_target.rect # l = left,  t = top
-        # print("This is l:", l)
-        # print("This is t:", t)
-        # _, _, w, h = self.camera_position # w = width, h = height
-        # adjusts the camera position based on targeted sprite (hardcoded widths and heights; 320, 240, 640, and 480 should actually be
-        #       half the camera window width, half camera window height, window width, and window height respectively)
-        self.camera_offset = (320-l, 240-t)
-        # print("Therefore, this is the offset:", self.camera_offset)
-        # print("This is the camera offset all sprites need to be moved by:")
-        # print(self.camera_offset)
-        # print(self.camera_offset.topleft)
+        # adjusts the camera position based on targeted sprite
+        #       subtracting half of the window's width and height gets the distance from the sprite's
+        #       current location in the world to the window's center.
+        self.camera_offset = (HALF_WINDOW_WIDTH-l, HALF_WINDOW_HEIGHT-t)
 
-    def apply(self, target):
-        # print(self.camera_offset.topleft)
-        # modifier = target.rect.move(self.camera_offset.topleft)
-        # print(modifier)
+    # returns the offset from the update() call to all sprites in the game, including the player.
+    # The actual addition doesn't happen in this function, though. It's performed in each sprite's update() class member
+    def apply(self):
+        # if self.camera_offset[0]+sprite.rect.left <= 0 or self.camera_offset[0]+sprite.rect.right >= 1920 or self.camera_offset[1]+sprite.rect.top <= 0 or self.camera_offset[1]+sprite.rect.bottom >= 1080:
+        #     self.camera_offset = (0,0)
         return self.camera_offset
 
 
@@ -72,18 +78,14 @@ class Background(pygame.sprite.Sprite):
 
         # create a pygame rectangle from the dimensions of the background image
         self.rect = self.image.get_rect()
-        print(self.rect)
 
+        # place it at 0, 0
         self.rect.topleft = (0, 0)
-        # print(self.rect)
- 
+
+    # sets the position of the background with respect to the offset generated in the camera class and passed in as an argument
+    # No addition is performed here because the background image was initially placed at 0, 0 and never moves (like the player does)
     def update(self, position):
-        # print("cam.topleft")
-        # print(cam.topleft)
-        # print(position)
         self.rect.topleft = (position[0], position[1])
-        # print(self.rect.topleft)
-        # print(self.rect.topleft)
 
 class Player(pygame.sprite.Sprite):
     """
@@ -127,11 +129,13 @@ class Player(pygame.sprite.Sprite):
         """
         # establish the desired position of the sprite
         #   is equal to the mouse's distance from the center of the window plus the actual position of the player
-        self.target_location = (mouse_position[0]-320+self.actual_position[0], mouse_position[1]-240+self.actual_position[1])
-        print(self.target_location)
+        self.target_location = (mouse_position[0]-HALF_WINDOW_WIDTH+self.actual_position[0], mouse_position[1]-HALF_WINDOW_HEIGHT+self.actual_position[1])
         # calculate the position of the mouse
         self.MoveWithMouse()
         # position the sprite on the screen
+        # A distinction has to be made between the sprite's position in the game window (self.rect.topleft) and in the game world (self.actual_position)
+        #       The sprite's game window position is what the user sees, but for that positioning to be calculated correctly, the sprite's 
+        #       actual position must be remembered.
         self.rect.topleft = self.actual_position = (self.x, self.y)
         # if the new position of the sprite would put it outside the boundaries of the window,
         # revert to the previous position
@@ -163,22 +167,18 @@ class Player(pygame.sprite.Sprite):
             self.x += int(min(5, distance/10) * math.cos(angle))
             self.y += int(min(5, distance/10) * math.sin(angle))
 
+    # adds the offset calculated in the camera class to its actual position in the world (not with respect to the game window)
     def update(self, position):
-        # print("cam.topleft")
-        # print(cam.topleft)
-        # print(position)
         self.rect.topleft = (self.actual_position[0]+position[0], self.actual_position[1]+position[1])
-        # print(self.rect.topleft)
-        # print(self.rect.topleft)
 
 def main():
     pygame.init()
 
     # sets the window title using title found in command line instruction
-    pygame.display.set_caption(argDict["title"])
+    pygame.display.set_caption(WINDOW_TITLE)
 
     # Set up the drawing window
-    screen = pygame.display.set_mode((int(argDict["width"]), int(argDict["height"])))
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     # for controlling frames per second
     clock = pygame.time.Clock()
@@ -209,7 +209,7 @@ def main():
         screen.fill((255,255,255))
 
         # sets frames per second to what's found in commandline instruction
-        clock.tick(int(argDict["fps"]))
+        clock.tick(GAME_FPS)
 
         # Did the user click the window close button?
         for event in pygame.event.get():
@@ -220,12 +220,12 @@ def main():
         if pygame.mouse.get_focused():
             p1.Move(pygame.mouse.get_pos())
 
-        # focuses in on the player
+        # focuses in on the player so that it is always centered in the game window
         camera.update(p1)
 
+        # loop through all sprites in the group and apply the camera offset to them
         for sprite in all_sprites:
-            new_position = camera.apply(sprite)
-            sprite.update(new_position)
+            sprite.update(camera.apply())
 
         # draw the sprites to the screen
         all_sprites.draw(screen)
@@ -238,5 +238,3 @@ def main():
 
 if __name__=='__main__':
     main()
-
-# fix the direction of the background image
