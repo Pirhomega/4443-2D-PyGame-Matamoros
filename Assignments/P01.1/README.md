@@ -25,7 +25,7 @@
 
 2. Follow the instructions on the [pygame wiki](https://www.pygame.org/wiki/GettingStarted) to get it installed.
 
-3. Open a command prompt / terminal in the `A05.1` folder
+3. Open a command prompt / terminal in the `P01.1` folder
 
 4. Run `game.py` by typing `python game.py title= width= height= fps= image= color=`. Select for yourself the Windows title (`title`), dimensions in pixels (`width` and `height`), refresh rate (`fps`), player image (`image`), and screen background color (`color`). Select the color from [color_list.txt](color_list.txt).
 
