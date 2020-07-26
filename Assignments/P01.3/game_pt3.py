@@ -64,7 +64,6 @@ class Camera():
         #     self.camera_offset = (0,0)
         return self.camera_offset
 
-
 class Background(pygame.sprite.Sprite):
     """
     A pygame sprite class visible on screen as an image
@@ -123,14 +122,11 @@ class Player(pygame.sprite.Sprite):
         self.x = int(argDict["startx"])
         self.y = int(argDict["starty"])
 
-        # record the previous position of the sprite
-        self.old_loc = (self.x, self.y)
+        # record the previous position of the sprite and position the sprite on the screen
+        self.rect.topleft = self.actual_position = self.old_loc = (self.x, self.y)
 
         # set how many pixels the sprite will move per frame (fps is set in the commandline)
         self.speed = 5
-
-        # position the sprite on the screen
-        self.rect.topleft = self.actual_position = (self.x, self.y)
 
         # location to which the mouse points
         self.target_location = (0,0)
@@ -149,10 +145,6 @@ class Player(pygame.sprite.Sprite):
         #       The sprite's game window position is what the user sees, but for that positioning to be calculated correctly, the sprite's 
         #       actual position must be remembered.
         self.rect.topleft = self.actual_position = (self.x, self.y)
-        # if the new position of the sprite would put it outside the boundaries of the window,
-        # revert to the previous position
-        if self.rect.left <= 0 or self.rect.right >= 1920 or self.rect.top <= 0 or self.rect.bottom >= 1080:
-            self.actual_position = self.old_loc
 
     def MoveWithMouse(self):
         """
@@ -181,12 +173,19 @@ class Player(pygame.sprite.Sprite):
 
     # adds the offset calculated in the camera class to its actual position in the world (not with respect to the game window)
     def update(self, position):
-        print("actual:", self.actual_position)
-        print("topleft:", self.rect.topleft)
-        print("old:", self.old_loc)
+        # print("actual:", self.actual_position)
+        # print("topleft:", self.rect.topleft)
+        # print("old:", self.old_loc)
         if self.rect.topleft == self.old_loc:
             self.idle_imagenum = max(1, (self.idle_imagenum + 1) % self.idle_imagelimit)
             self.image = pygame.image.load("./playersprites/"+self.idle_pictureset["name"]+str(self.idle_imagenum)+").png")
+            
+        # if the new position of the sprite would put it outside the boundaries of the window,
+        # revert to the previous position
+        if self.rect.left <= 0 or self.rect.right >= 1920 or self.rect.top <= 0 or self.rect.bottom >= 1080:
+            self.dead_imagenum = max(1, (self.dead_imagenum + 1) % self.dead_imagelimit)
+            self.image = pygame.image.load("./playersprites/"+self.dead_pictureset["name"]+str(self.dead_imagenum)+").png")
+            self.actual_position = self.old_loc
         self.rect.topleft = (self.actual_position[0]+position[0], self.actual_position[1]+position[1])
 
 def main():
