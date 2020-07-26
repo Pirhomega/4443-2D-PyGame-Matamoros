@@ -1,24 +1,20 @@
-# P01.2 - CovidZAR.EIEIO
+# P01.3 - CovidZAR.EIEIO
 
 ## Corbin Matamoros
 
 ## Assignment Description
 
-### This program uses the pygame library to move a sprite (textured/colored circle) around a game world while staying centered in the window. The sprite is not allowed to travel off the world (represented by the background image), which is surrounded by white
+### This program uses the pygame library to move a sprite (textured/colored circle) around a game world while staying centered in the window. The sprite is not allowed to travel off the world (represented by the background image), which is surrounded by white. When the sprite is not moving, the "idle" animation plays. When the sprite hits a boundary,  it plays a "dying" animation
 
 ## Folder Structure
 
 |   #   | File | Assignment Description |
 | :---: | ----------- | ---------------------- |
-|   1    |  [game_pt2.py](game_pt2.py)  | main driver code that lauches Pygame application |
+|   1    |  [game_pt3.py](game_pt2.py)  | main driver code that lauches Pygame application |
 |   2    |  [helper_module.py](helper_module.py)  | helper code written by Dr. Griffin |
 |   3    |  [color_list.txt](color_list.txt)  | list of available window background colors |
 |   4    |  [colors.json](colors.json)  | `.json` file of names of colors and their RGB/Hex values |
 |   5    |  [ball_48x48.png](ball_48x48.png)  | image used to represent the player in the Pygame application |
-|   6    |  [screenshot1.png](screenshot1.png)  | image showing player on left side of screen |
-|   7    |  [screenshot2.png](screenshot2.png)  | image showing player on right side of screen |
-|   8    |  [screenshot3.png](screenshot3.png)  | image showing player at bottom of screen |
-|   9    |  [screenshot4.png](screenshot3.png)  | image showing player at top left corner of screen |
 
 ## Instructions
 
@@ -28,15 +24,15 @@
 
 3. Open a command prompt / terminal in the `P01.2` folder
 
-4. Run `game_pt2.py` by typing `python game_pt2.py title= width= height= fps= player_image= color= background_image=`. Select for yourself the window title (`title`), dimensions in pixels (`width` and `height`), refresh rate (`fps`), your character's image (`player_image`), screen background color (`color`), and the background image (`background_image`). Select the color from [color_list.txt](color_list.txt).
+4. Run `game_pt3.py` by typing `python game_pt3.py title= width= height= startx= starty= fps= player_image= color= background_image=`. Select for yourself the window title (`title`), dimensions in pixels (`width` and `height`), the starting location of your character (`startx` and `starty`), refresh rate (`fps`), your character's image (`player_image`), screen background color (`color`), and the background image (`background_image`). Select the color from [color_list.txt](color_list.txt).
 
 5. To move your player, keep your mouse over the window and move it around (clicking won't do anything). If the mouse leaves the window, the player will stop moving.
 
 6. Close the window to exit the game
 
-## Example
+## Example NOT DONE YET
 
-The following is an example of the Pygame app if run with this command: `python game_pt2.py title="Pygame Example" width=1280 height=720 startx=320 starty=240 fps=60 player_image="./ball_48x48.png" color=black background_image="./background.jpg"`
+The following is an example of the Pygame app if run with this command: `python game_pt3.py title="Pygame Example" width=1280 height=720 startx=20 starty=20 fps=60 player_image="./ball_48x48.png" color=black background_image="./background.jpg"`
 
 ### Gif
 
@@ -47,21 +43,3 @@ The following is an example of the Pygame app if run with this command: `python 
 `python game_pt2.py title="Pygame Example" width=640 height=480 startx=320 starty=240 fps=60 player_image="./ball_48x48.png" color=black background_image="./background.jpg"`
 
 <img src="screenshot1.png" width="300">
-
-### Screenshot 2
-
-`python game_pt2.py title="Pygame Example" width=1000 height=1000 startx=320 starty=240 fps=60 player_image="./ball_48x48.png" color=black background_image="./background.jpg"`
-
-<img src="screenshot2.png" width="300">
-
-### Screenshot 3
-
-`python game_pt2.py title="Pygame Example" width=1280 height=720 startx=320 starty=240 fps=60 player_image="./ball_48x48.png" color=black background_image="./background.jpg"`
-
-<img src="screenshot3.png" width="300">
-
-### Screenshot 4
-
-`python game_pt2.py title="Pygame Example" width=1280 height=720 startx=320 starty=240 fps=60 player_image="./ball_48x48.png" color=black background_image="./background.jpg"`
-
-<img src="screenshot4.png" width="300">

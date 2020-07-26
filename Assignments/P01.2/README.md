@@ -28,7 +28,7 @@
 
 3. Open a command prompt / terminal in the `P01.2` folder
 
-4. Run `game_pt2.py` by typing `python game_pt2.py title= width= height= fps= player_image= color= background_image=`. Select for yourself the window title (`title`), dimensions in pixels (`width` and `height`), refresh rate (`fps`), your character's image (`player_image`), screen background color (`color`), and the background image (`background_image`). Select the color from [color_list.txt](color_list.txt).
+4. Run `game_pt2.py` by typing `python game_pt2.py title= width= height= startx= starty= fps= player_image= color= background_image=`. Select for yourself the window title (`title`), dimensions in pixels (`width` and `height`), the starting location of your character (`startx` and `starty`), refresh rate (`fps`), your character's image (`player_image`), screen background color (`color`), and the background image (`background_image`). Select the color from [color_list.txt](color_list.txt).
 
 5. To move your player, keep your mouse over the window and move it around (clicking won't do anything). If the mouse leaves the window, the player will stop moving.
 
