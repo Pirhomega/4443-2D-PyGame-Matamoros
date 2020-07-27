@@ -13,12 +13,14 @@
 |   1    |  [game_pt2.py](game_pt2.py)  | main driver code that lauches Pygame application |
 |   2    |  [helper_module.py](helper_module.py)  | helper code written by Dr. Griffin |
 |   3    |  [color_list.txt](color_list.txt)  | list of available window background colors |
-|   4    |  [colors.json](colors.json)  | `.json` file of names of colors and their RGB/Hex values |
-|   5    |  [ball_48x48.png](ball_48x48.png)  | image used to represent the player in the Pygame application |
-|   6    |  [screenshot1.png](screenshot1.png)  | image showing player on left side of screen |
-|   7    |  [screenshot2.png](screenshot2.png)  | image showing player on right side of screen |
-|   8    |  [screenshot3.png](screenshot3.png)  | image showing player at bottom of screen |
-|   9    |  [screenshot4.png](screenshot3.png)  | image showing player at top left corner of screen |
+|   4    |  [grab_colors.py](grab_colors.py)  | mini program written by Corbin that prints all color options to the `color_list.txt` |
+|   5    |  [colors.json](colors.json)  | `.json` file of names of colors and their RGB/Hex values |
+|   6    |  [ball_48x48.png](ball_48x48.png)  | image used to represent the player in the Pygame application |
+|   7    |  [background.jpg](background.jpg)  | image used to represent the world in which the player resides |
+|   8    |  [screenshot1.png](screenshot1.png)  | image showing player on left side of screen |
+|   9    |  [screenshot2.png](screenshot2.png)  | image showing player on right side of screen |
+|   10    |  [screenshot3.png](screenshot3.png)  | image showing player at bottom of screen |
+|   11    |  [screenshot4.png](screenshot3.png)  | image showing player at top left corner of screen |
 
 ## Instructions
 
