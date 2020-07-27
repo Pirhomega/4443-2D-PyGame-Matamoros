@@ -104,6 +104,11 @@ class Player(pygame.sprite.Sprite):
 
         # load the sprite as an image
         # There are three animations that will play in this game: Idle, Dead, and Walk.
+        # Animations are loop-played, meaning, since each frame of every animation are numbered (e.g. `Dead (1).png`, `Dead (2).png`, etc.),
+        #       we can loop through them using the `<animation_name>_imagenum` variable. `<animation_name>_imagelimit`
+        #       keeps the program from trying to load an image that doesn't exist. (We don't want to open `Dead (17).png` if
+        #       there are only 16 frames in the Dead animation.) `<animation_name>_imagelimit` gets its value from the `info.json`
+        #       file in the `playersprites` folder.
         self.idle_imagenum = 1
         self.dead_imagenum = 1
         self.walk_imagenum = 1
@@ -113,6 +118,7 @@ class Player(pygame.sprite.Sprite):
         # self.idle_imageshowrate = self.idle_pictureset["fps"]
         # self.dead_imageshowrate = self.dead_pictureset["fps"]
         # self.walk_imageshowrate = self.walk_pictureset["fps"]
+        # this is how we will load any frame of an animation (here, we load the first `Idle` frame)
         self.image = pygame.image.load("./playersprites/"+self.idle_pictureset["name"]+str(self.idle_imagenum)+").png")
 
         # create a pygame rectangle from the dimensions of the image
@@ -174,23 +180,25 @@ class Player(pygame.sprite.Sprite):
 
     # adds the offset calculated in the camera class to its actual position in the world (not with respect to the game window)
     def update(self, position):
-        # if the distance from the mouse to the player is less than 10, play the "Idle" animation
+        # If the distance from the mouse to the player is less than 10, loop-play the "Idle" animation.
         if self.distance < 10:
+            # We use the `max` function since there are no images with a 0 in their name,
+            #       and the mod function will return a 0 if self.<animation>_imagenum = self.<animation>_imagelimit
             self.idle_imagenum = max(1, (self.idle_imagenum + 1) % self.idle_imagelimit)
             self.image = pygame.image.load("./playersprites/"+self.idle_pictureset["name"]+str(self.idle_imagenum)+").png")
-        # otherwise, play the "Walk" animation
+        # otherwise, loop-play the "Walk" animation
         elif self.distance >= 10:
             self.walk_imagenum = max(1, (self.walk_imagenum + 1) % self.walk_imagelimit)
             self.image = pygame.image.load("./playersprites/"+self.walk_pictureset["name"]+str(self.walk_imagenum)+").png")
 
-            
         # if the new position of the sprite would put it outside the boundaries of the window,
         #       revert to the previous position
-        # Also, load the "Dead" animation frames
+        # Also, load the "Dead" animation frames when the player hits a wall
         if self.rect.left <= 0 or self.rect.right >= 1920 or self.rect.top <= 0 or self.rect.bottom >= 1080:
             self.dead_imagenum = max(1, (self.dead_imagenum + 1) % self.dead_imagelimit)
             self.image = pygame.image.load("./playersprites/"+self.dead_pictureset["name"]+str(self.dead_imagenum)+").png")
             self.actual_position = self.old_loc
+        # add the camera offset to the player sprite's actual position in the game world, "moving" them to the center of the window
         self.rect.topleft = (self.actual_position[0]+position[0], self.actual_position[1]+position[1])
 
 def main():
@@ -227,7 +235,7 @@ def main():
     running = True
     while running:
 
-        # fill screen with white
+        # fill screen with color from commandline
         screen.fill(colors[argDict["color"]]['rgb'])
 
         # sets frames per second to what's found in commandline instruction

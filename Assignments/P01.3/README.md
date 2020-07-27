@@ -15,8 +15,9 @@
 |   3    |  [grab_colors.py](grab_colors.py)  | mini program written by Corbin that prints all color options to the `color_list.txt` |
 |   4    |  [color_list.txt](color_list.txt)  | list of available window background colors |
 |   5    |  [colors.json](colors.json)  | `.json` file of names of colors and their RGB/Hex values |
-|   6    |  [ball_48x48.png](ball_48x48.png)  | image used to represent the player in the Pygame application |
-|   7    |  [background.jpg](background.jpg)  | image used to represent the world in which the player resides |
+|   6    |  [info.json](./playersprites/info.json)  | `.json` file of each animations' file name, number of frames in each animation, and speed at which the animation should play |
+|   7    |  [ball_48x48.png](ball_48x48.png)  | image used to represent the player in the Pygame application |
+|   8    |  [background.jpg](background.jpg)  | image used to represent the world in which the player resides |
 
 ## Instructions
 
