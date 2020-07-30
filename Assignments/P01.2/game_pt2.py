@@ -1,10 +1,11 @@
 # python game_pt2.py title="Pygame Example" width=640 height=480 startx=50 starty=50 fps=60 player_image="./ball_48x48.png" background_image="./background.jpg"
 """
-Pygame A05.1
+Pygame P01.2
 
 Description:
 
-   Moving a player with Mouse (no clicking necessary) in a large world
+    Moving a player with Mouse (no clicking necessary) in a large world.
+    The camera will move along with the player.
 
 """
 # Import and initialize the pygame library

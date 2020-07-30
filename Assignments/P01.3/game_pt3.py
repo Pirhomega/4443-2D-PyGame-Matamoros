@@ -1,11 +1,12 @@
 # python game_pt3.py title="Pygame Example" width=1280 height=720 startx=20 starty=20 fps=60 player_image="./ball_48x48.png" color=black background_image="./background.jpg"
 """
-Pygame A05.1
+Pygame P01.3
 
 Description:
 
-   Moving a player with Mouse (no clicking necessary) in a large world.
-   Player has three animations that play either while moving, staying still, or running into the world border.
+    Moving a player with Mouse (no clicking necessary) in a large world.
+    The camera will move along with the player.
+    Player has three animations that play either while moving, staying still, or running into the world border.
 
 """
 # Import and initialize the pygame library

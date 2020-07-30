@@ -40,15 +40,11 @@
 
 ## Example
 
-The following is an example of the Pygame app if run with this command: `python game_pt4.py title="Pygame Example" width=1280 height=720 startx=2 starty=2 fps=60 player_image="./playersprites/Idle (1).png" color=white background_image="./background.jpg" enemy_count=5`
-
-### Gif
-
-![sprite movement video](https://media.giphy.com/media/XyOmBlux6Azs1J3rpu/giphy.gif)
+The following is an example of the Pygame app if run with this command: `python game_pt4.py title="Pygame Example" width=1280 height=720 startx=2 starty=2 fps=30 player_image="./playersprites/Idle (1).png" color=white background_image="./background.jpg" enemy_count=5`
 
 ### Video with sound
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/L64TXapkkA0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Sprite Movement Video with Sound](https://img.youtube.com/vi/L64TXapkkA0/0.jpg)](https://www.youtube.com/watch?v=L64TXapkkA0)
 
 ### Screenshots
 
