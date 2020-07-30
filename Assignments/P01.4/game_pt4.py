@@ -1,4 +1,4 @@
-# python game_pt3.py title="Pygame Example" width=1280 height=720 startx=20 starty=20 fps=60 player_image="./ball_48x48.png" color=black background_image="./background.jpg"
+# python game_pt4.py title="Pygame Example" width=1280 height=720 startx=20 starty=20 fps=60 player_image="./playersprites/Idle (1).png" color=white background_image="./background.jpg" enemy_count=50
 """
 Pygame A05.1
 
@@ -14,6 +14,7 @@ import sys
 import random
 import os
 import math
+import time
 
 # Tells OS where to open the window
 os.environ['SDL_VIDEO_WINDOW_POS'] = str(460) + "," + str(40)
@@ -55,7 +56,7 @@ class Camera():
     # moves the camera to focus in on 'target'
     def update(self, player_target):
         # grabs the left and top points of the targeted sprite
-        l, t, _, _ = player_target.rect # l = left,  t = top
+        l, t = player_target.actual_position # l = left,  t = top
         # adjusts the camera position based on targeted sprite
         #       subtracting half of the window's width and height gets the distance from the sprite's
         #       current location in the world to the window's center.
@@ -102,8 +103,8 @@ class Enemy(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # the current set of sprite images to use
-        # self.shot_pictureset = mob_animations["Idle"]
-        # self.dead_pictureset = mob_animations["Dead"]
+        # self.shot_pictureset = mob_animations["Shot"]
+        self.dead_pictureset = mob_animations["Dead"]
         # self.walk_pictureset = mob_animations["Walk"]
         self.idle_pictureset = mob_animations["Idle"]
 
@@ -115,10 +116,10 @@ class Enemy(pygame.sprite.Sprite):
         #       there are only 16 frames in the Dead animation.) `<animation_name>_imagelimit` gets its value from the `info.json`
         #       file in the `playersprites` folder.
         self.idle_imagenum = 1
-        # self.dead_imagenum = 1
+        self.dead_imagenum = 1
         # self.walk_imagenum = 1
         self.idle_imagelimit = self.idle_pictureset["count"]
-        # self.dead_imagelimit = self.dead_pictureset["count"]
+        self.dead_imagelimit = self.dead_pictureset["count"]
         # self.walk_imagelimit = self.walk_pictureset["count"]
         # self.idle_imageshowrate = self.idle_pictureset["fps"]
         # self.dead_imageshowrate = self.dead_pictureset["fps"]
@@ -140,7 +141,7 @@ class Enemy(pygame.sprite.Sprite):
         #       set how many pixels the sprite will move per frame (fps is set in the commandline)
         self.distance = 0
         self.speed = 5
-        self.state = True
+        self.hit = True
 
         # location to which the mouse points
         self.target_location = (0,0)
@@ -188,8 +189,17 @@ class Enemy(pygame.sprite.Sprite):
     def update(self, position):
         # We use the `max` function since there are no images with a 0 in their name,
         #       and the mod function will return a 0 if self.<animation>_imagenum = self.<animation>_imagelimit
-        self.idle_imagenum = max(1, (self.idle_imagenum + 1) % self.idle_imagelimit)
-        self.image = pygame.image.load("./mob/"+self.idle_pictureset["name"]+'/'+self.idle_pictureset["name"]+str(self.idle_imagenum)+".png")
+        if self.hit:
+            self.idle_imagenum = max(1, (self.idle_imagenum + 1) % self.idle_imagelimit)
+            self.image = pygame.image.load("./mob/"+self.idle_pictureset["name"]+'/'+self.idle_pictureset["name"]+str(self.idle_imagenum)+".png")
+        elif not self.hit:
+            self.dead_imagenum += 1
+            if self.dead_imagenum == self.dead_imagelimit:
+                self.dead_imagenum = 1
+                self.kill()
+            else:
+                self.image = pygame.image.load("./mob/"+self.dead_pictureset["name"]+'/'+self.dead_pictureset["name"]+str(self.dead_imagenum)+".png")
+
 
         # # If the distance from the mouse to the player is less than 10, loop-play the "Idle" animation.
         # if self.distance < 10:
@@ -245,10 +255,12 @@ class Player(pygame.sprite.Sprite):
         # self.dead_imageshowrate = self.dead_pictureset["fps"]
         # self.walk_imageshowrate = self.walk_pictureset["fps"]
         # this is how we will load any frame of an animation (here, we load the first `Idle` frame)
-        self.image = pygame.image.load("./playersprites/"+self.idle_pictureset["name"]+str(self.idle_imagenum)+").png")
+        self.image = pygame.image.load(argDict["player_image"])
 
         # create a pygame rectangle from the dimensions of the image
         self.rect = self.image.get_rect()
+        self.IMAGE_WIDTH = self.rect.right - self.rect.left
+        self.IMAGE_HEIGHT = self.rect.bottom - self.rect.top
 
         # set the position of the sprite on the window
         self.x = int(argDict["startx"])
@@ -279,7 +291,7 @@ class Player(pygame.sprite.Sprite):
         # A distinction has to be made between the sprite's position in the game window (self.rect.topleft) and in the game world (self.actual_position)
         #       The sprite's game window position is what the user sees, but for that positioning to be calculated correctly, the sprite's 
         #       actual position must be remembered.
-        self.rect.topleft = self.actual_position = (self.x, self.y)
+        self.actual_position = (self.x, self.y)
 
     def MoveWithMouse(self):
         """
@@ -321,7 +333,7 @@ class Player(pygame.sprite.Sprite):
         # if the new position of the sprite would put it outside the boundaries of the window,
         #       revert to the previous position
         # Also, load the "Dead" animation frames when the player hits a wall
-        if self.rect.left <= 0 or self.rect.right >= 1920 or self.rect.top <= 0 or self.rect.bottom >= 1080:
+        if self.actual_position[0] <= 0 or self.actual_position[0]+self.IMAGE_WIDTH >= 1920 or self.actual_position[1] <= 0 or self.actual_position[1]+self.IMAGE_HEIGHT >= 1080:
             self.dead_imagenum = max(1, (self.dead_imagenum + 1) % self.dead_imagelimit)
             self.image = pygame.image.load("./playersprites/"+self.dead_pictureset["name"]+str(self.dead_imagenum)+").png")
             self.actual_position = self.old_loc
@@ -353,11 +365,11 @@ class Bullet(pygame.sprite.Sprite):
         self.bullet_imagelimit = self.bullet_pictureset["count"]
         # this is how we will load any frame of an animation (here, we load the first `Idle` frame)
         self.image_unrot = pygame.image.load("./snowball/"+self.bullet_pictureset["name"]+str(self.bullet_imagenum)+".png")
-
+        
         # create a pygame rectangle from the dimensions of the image
         self.rect = self.image_unrot.get_rect()
 
-        # location to which the mouse points
+        # angle between the horizontal and the mouse pointer
         self.angle = self.getBulletDirection(mouse_pos)
 
         # this is how we will load any frame of an animation (here, we load the first `Idle` frame)
@@ -370,8 +382,6 @@ class Bullet(pygame.sprite.Sprite):
         # record the previous position of the sprite and position the sprite on the screen
         self.rect.topleft = self.actual_position = (self.x, self.y)
 
-        # set the distance from the mouse pointer to the sprite's topleft corner and
-        #       set how many pixels the sprite will move per frame (fps is set in the commandline)
         self.state = True
 
 
@@ -390,6 +400,8 @@ class Bullet(pygame.sprite.Sprite):
         # use the arctan function to find the angle from the horizontal to the desired position
         return math.atan2(dy, dx)
 
+    # def checkForCollisions(self,)
+
     # adds the offset calculated in the camera class to its actual position in the world (not with respect to the game window)
     def update(self, position):
         # We use the `max` function since there are no images with a 0 in their name,
@@ -407,7 +419,7 @@ class Bullet(pygame.sprite.Sprite):
         # if the new position of the sprite would put it outside the boundaries of the window,
         #       revert to the previous position
         # Also, load the "Dead" animation frames when the player hits a wall
-        if self.rect.left <= 0 or self.rect.right >= 1920 or self.rect.top <= 0 or self.rect.bottom >= 1080:
+        if self.actual_position[0] <= 0 or self.actual_position[0] >= 1920 or self.actual_position[1] <= 0 or self.actual_position[1] >= 1080:
             self.state = False
         # # If the distance from the mouse to the player is less than 10, loop-play the "Idle" animation.
         # if self.distance < 10:
@@ -426,6 +438,11 @@ class Bullet(pygame.sprite.Sprite):
 def main():
     pygame.init()
 
+    pygame.mixer.init(buffer=64)
+    snowball_thrown = pygame.mixer.Sound("./sounds/throw.wav")
+    snowball_hit = pygame.mixer.Sound("./sounds/hit.wav")
+    snowball_thrown.set_volume(0.5)
+    snowball_hit.set_volume(0.5)
     # sets the window title using title found in command line instruction
     pygame.display.set_caption(WINDOW_TITLE)
 
@@ -447,16 +464,18 @@ def main():
     camera = Camera()
 
     # group for all sprites that are not the player
-    all_sprites = pygame.sprite.Group()
+    main_sprites = pygame.sprite.Group()
+    bullet_sprites = pygame.sprite.Group()
+    mob_sprites = pygame.sprite.Group()
 
     # add sprites to the sprite group
     # The order we add these to the group is the order they are drawn to the screen,
     #       so we add the background first to keep the player from being covered
-    all_sprites.add(bkgr)
-    all_sprites.add(p1)
+    main_sprites.add(bkgr)
+    main_sprites.add(p1)
 
     for x in range(num_enemies):
-        all_sprites.add(Enemy())
+        mob_sprites.add(Enemy())
 
     # Run until the user asks to quit game loop
     running = True
@@ -472,28 +491,40 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                snowball_thrown.play()
+                snow_bullet = Bullet(p1.actual_position,mouse_pos)
+                bullet_sprites.add(snow_bullet)
+
 
         # attempt to move the player by sending the positioning of the mouse
         if pygame.mouse.get_focused():
             mouse_pos = pygame.mouse.get_pos()
             p1.Move(mouse_pos)
-            for button in pygame.mouse.get_pressed():
-                if button:
-                    snow_bullet = Bullet(p1.actual_position,mouse_pos)
-                    all_sprites.add(snow_bullet)
 
         # focuses in on the player so that it is always centered in the game window
         camera.update(p1)
 
         # loop through all sprites in the group and apply the camera offset to them
-        for sprite in all_sprites:
+        for sprite in main_sprites:
+            sprite.update(camera.apply())
+        for sprite in bullet_sprites:
             sprite.update(camera.apply())
             if not sprite.state:
                 sprite.kill()
+        for sprite in mob_sprites:
+            sprite.update(camera.apply())
+        for bullet in bullet_sprites:
+            for mob in mob_sprites:
+                if bullet.rect.colliderect(mob.rect):
+                    snowball_hit.play()
+                    bullet.kill()
+                    mob.hit = False
 
         # draw the sprites to the screen
-        all_sprites.draw(screen)
-
+        main_sprites.draw(screen)
+        bullet_sprites.draw(screen)
+        mob_sprites.draw(screen)
         # show screen
         pygame.display.flip()
 
