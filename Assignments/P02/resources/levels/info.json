@@ -1,0 +1,62 @@
+{
+    "1": {
+        "objectives": {
+            "points": 3,
+            "enemies": 3
+        },
+        "stipulations": {
+            "life": false
+        },
+        "next_level": "2"
+    },
+    "2":{
+        "objectives": {
+            "points": 3,
+            "enemies": 3
+        },
+        "stipulations": {
+            "life": false
+        },
+        "next_level": "3"
+    },
+    "3":{
+        "objectives": {
+            "points": 3,
+            "enemies": 3
+        },
+        "stipulations": {
+            "life": false
+        },
+        "next_level": "4"
+    },
+    "4":{
+        "objectives": {
+            "points": 1,
+            "enemies": 3
+        },
+        "stipulations": {
+            "life": false
+        },
+        "next_level": false
+    },
+    "5":{
+        "objectives": {
+            "points": 1,
+            "enemies": 3
+        },
+        "stipulations": {
+            "life": false
+        },
+        "next_level": "1"
+    },
+    "6":{
+        "objectives": {
+            "points": 1,
+            "enemies": 3
+        },
+        "stipulations": {
+            "life": true
+        },
+        "next_level": "5"
+    }
+}
