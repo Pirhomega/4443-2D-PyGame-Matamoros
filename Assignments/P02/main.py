@@ -266,10 +266,11 @@ class Player(pygame.sprite.Sprite):
             if self.rect.topleft[1] - energy >= 0:
                 self.rect.topleft = (self.x, self.rect.topleft[1] - energy)
                 self.vertical_speed -= 1
-            if self.rect.topleft[1] == 0 or self.vertical_speed == 0:
+            if self.rect.topleft[1] < 0 or self.vertical_speed == 0:
                 self.falling = True
                 self.jumping = False
         if self.falling:
+            print("falling")
             if self.rect.bottom + self.gravity <= floor_y:
                 self.rect.bottom += self.gravity
             else:
@@ -279,6 +280,7 @@ class Player(pygame.sprite.Sprite):
                 self.falling = False
         if (not self.jumping) and (self.rect.bottom < floor_y):
             self.falling = True
+        print(self.rect.topleft, self.state, self.falling)
 
     # applies changes to the player sprite, such as animation and position
     def update(self):
@@ -353,7 +355,10 @@ class LevelInfoHolder():
         if level_type != '6':
             pygame.mixer.init(buffer=64)
             self.background_music = pygame.mixer.Sound(ARGDICT["sounds"]+'/'+level_type+'.ogg')
-            self.background_music.set_volume(0.1)
+            if level_type == '2':
+                self.background_music.set_volume(0.01)
+            else:
+                self.background_music.set_volume(0.1)
             self.background_music.play()
         self.main_sprites = pygame.sprite.Group()
         self.item_sprites = pygame.sprite.Group()
@@ -377,8 +382,8 @@ def main():
     pygame.mixer.init(buffer=64)
     snowball_hit = pygame.mixer.Sound(ARGDICT["sounds"]+"/hit.ogg")
     santa_death = pygame.mixer.Sound(ARGDICT["sounds"]+"/death.ogg")
-    santa_death.set_volume(0.5)
-    snowball_hit.set_volume(0.5)
+    santa_death.set_volume(0.1)
+    snowball_hit.set_volume(0.1)
 
     # sets the window title using title found in command line instruction
     pygame.display.set_caption(WINDOW_TITLE)
