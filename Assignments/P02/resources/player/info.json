@@ -1,0 +1,18 @@
+{
+    "dead":{
+        "count":17,
+        "fps":30
+    },
+    "idle":{
+        "count":16,
+        "fps":30
+    },
+    "jump":{
+        "count":16,
+        "fps":30
+    },
+    "walk":{
+        "count":13,
+        "fps":30
+    }
+}
