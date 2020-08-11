@@ -26,4 +26,5 @@ Repository for the Platform-based 2D Games in Python class with Dr. Terry Griffi
 ├────── P01.2
 ├────── P01.3
 ├────── P01.4
+├────── P02
 ```

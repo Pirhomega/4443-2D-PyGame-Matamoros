@@ -1,4 +1,5 @@
 # stolen from https://www.tutorialspoint.com/rename-multiple-files-using-python#:~:text=rename()%20method%20is%20used,part%20of%20the%20os%20module.
+# renames all files in a folder
 
 import os
 # Function to rename multiple files

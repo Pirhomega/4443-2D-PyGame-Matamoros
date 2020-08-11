@@ -1,3 +1,5 @@
+# resizes all image in a folder
+
 from PIL import Image
 
 for i in range(1,17):
